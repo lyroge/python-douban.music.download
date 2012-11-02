@@ -30,3 +30,7 @@ def main(url):
                 path=g.group(2).replace('\\', '')
                 t=downloader(path, name)
                                                                                                                                                       5,1          顶端
+if __name__ == '__main__':
+        main("http://site.douban.com/huazhou/")
+        for t in threads:
+                t.join()
