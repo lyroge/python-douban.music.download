@@ -1,1 +1,3 @@
-readme
+通过豆瓣音乐页面对html中分析出所有mp3（正则匹配）文件url，然后用urllib中方法直接将文件下载到本地。
+
+过程中用到多线程（继承threading.Thread的方法创建）
