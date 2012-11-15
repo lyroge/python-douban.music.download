@@ -1,3 +1,15 @@
-通过豆瓣音乐页面对html中分析出所有mp3（正则匹配）文件url，然后用urllib中方法直接将文件下载到本地。
+豆瓣音乐小站MP3下载器
 
-过程中用到多线程（继承threading.Thread的方法创建）
+原理：
+对豆瓣音乐小站页面html分析出所有mp3（正则匹配）文件url，然后用urllib.urlretrieve中方法直接将文件下载到本地。
+
+多线程
+通过多线程技术下载（继承threading.Thread的方法创建）
+
+
+updates:
+
+2012/11/15 16:19
+1.修改了保存的文件名为unicode字符 self.name.decode('utf8')
+2.对正则表达中应用了非捕获分组
+3.去掉了一些无用的包
