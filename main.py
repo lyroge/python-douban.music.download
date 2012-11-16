@@ -38,7 +38,6 @@ def main(websiteurl):
         req.add_header("cookie", "bid=hellodouban")
         response=urllib2.urlopen(req)
         text=response.read()
-        print text
         groups=re.finditer(reg, text)
         for g in groups:
                 name=g.group(1).strip() + ".mp3"
