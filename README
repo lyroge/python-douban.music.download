@@ -9,6 +9,10 @@
 
 updates:
 
+2012/11/16 17:03
+1.该脚本可以接受小站地址参数，执行如：python main.py http://site.douban.com/******/
+2.为请求头加入了user-agent、cookie， 否则的话豆瓣返回403
+
 2012/11/15 16:19
 1.修改了保存的文件名为unicode字符 self.name.decode('utf8')
 2.对正则表达中应用了非捕获分组

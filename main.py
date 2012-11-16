@@ -1,8 +1,8 @@
 #! /usr/bin/python2.7
 # -- coding:utf-8 --
 
-import os, re
-import urllib,threading
+import os, re, sys
+import urllib,urllib2,threading
 
 #匹配音乐url
 
@@ -14,7 +14,7 @@ import urllib,threading
 # "id":"294349"}
 
 #(?:.+?) nocare things
-reg=re.compile('{"name":"(.+?)" (?:.+?) "rawUrl":"(.+?)" (?: ,.+? )}', re.I | re.X)
+reg=re.compile('{"name":"(.+?)"(?:.+?)"rawUrl":"(.+?)"(?:,.+?)}', re.I | re.X)
 
 #音乐下载线程类
 class downloader(threading.Thread):
@@ -32,9 +32,13 @@ threads=[]
 
 #多线程下载文件
 def main(websiteurl):
-        response=urllib.urlopen(websiteurl)
+        #response=urllib.urlopen(websiteurl)
+        req=urllib2.Request(websiteurl)
+        req.add_header("User-Agent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.4 (KHTML, like Gecko) Chrome/22.0.1229.79 Safari/537.4")
+        req.add_header("cookie", "bid=hellodouban")
+        response=urllib2.urlopen(req)
         text=response.read()
-
+        print text
         groups=re.finditer(reg, text)
         for g in groups:
                 name=g.group(1).strip() + ".mp3"
@@ -44,7 +48,13 @@ def main(websiteurl):
 
 
 if __name__ == '__main__':
-        main("http://site.douban.com/huazhou/")
+        args=sys.argv
+        if len(args)<2:
+                print u'没有指定小站路径，请指定。如：http://site.douban.com/huazhou/'
+                sys.exit()
+
+        main(args[1])
+
         for t in threads:
                 t.start()
         for t in threads:
