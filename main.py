@@ -4,8 +4,12 @@
 import os, re, sys
 import urllib,urllib2,threading
 
-#匹配音乐url
+#设置豆瓣下载器的urlopener
+class doubanURLopener(urllib.FancyURLopener):
+        version="Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.4 (KHTML, like Gecko) Chrome/22.0.1229.79 Safari/537.4"
+#urllib._urlopener = doubanURLopener()
 
+#匹配音乐url
 #{"name":"给他一瓶可乐",
 # "url":"aHR0cDovL21yMy5kb3ViYW4uY29tLzIwMTIxMTE1MTUzOC9hODk3NmY2MTJjZGY3YmMyMWFkYjkyYWI3ZmFmY2E1Ny92aWV3L211c2ljaWFubXAzL21wMy94MTM3MDQyNzkubXAz",
 # "cover":"http:\/\/img3.douban.com\/view\/site\/small\/public\/197604b046aae66.jpg",
