@@ -1,7 +1,7 @@
 #! /usr/bin/python2.7
 # -- coding:utf-8 --
 
-import os, re, sys
+import os, re, sys, time
 import urllib,urllib2,threading
 
 #设置豆瓣下载器的urlopener
@@ -20,16 +20,23 @@ class doubanURLopener(urllib.FancyURLopener):
 #(?:.+?) nocare things
 reg=re.compile('{"name":"(.+?)"(?:.+?)"rawUrl":"(.+?)"(?:,.+?)}', re.I | re.X)
 
+
+f=open('log.txt', 'w+')
+
 #音乐下载线程类
 class downloader(threading.Thread):
         def __init__(self, url, name):
+                f.write(url + '\r\n')
                 threading.Thread.__init__(self)
                 self.url=url
                 self.name=name
 
         def run(self):
                 print 'downloading from %s' % self.url
-                urllib.urlretrieve(self.url, self.name.decode('utf8'))
+                try:
+                    urllib.urlretrieve(self.url, self.name.decode('utf8'))
+                except Exception as e:
+                    f.write('url:' + self.url + '\r\n' + str(e) + '\r\n')
 
 #线程数组
 threads=[]
@@ -60,5 +67,7 @@ if __name__ == '__main__':
 
         for t in threads:
                 t.start()
+        	time.sleep(1)
+		f.flush()
         for t in threads:
                 t.join()
