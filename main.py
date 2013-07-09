@@ -25,37 +25,38 @@ f=open('log.txt', 'w+')
 
 #音乐下载线程类
 class downloader(threading.Thread):
-        def __init__(self, url, name):
-                f.write(url + '\r\n')
+        def __init__(self):
                 threading.Thread.__init__(self)
-                self.url=url
-                self.name=name
+                self.info=[]
 
         def run(self):
-                print 'downloading from %s' % self.url
-                try:
-                    urllib.urlretrieve(self.url, self.name.decode('utf8'))
-                except Exception as e:
-                    f.write('url:' + self.url + '\r\n' + str(e) + '\r\n')
+                for i in self.info:
+                    print 'downloading from %s\r\n' % i['url']
+                    try:
+                        urllib.urlretrieve(i['url'], i['name'].decode('utf8'))
+                    except Exception as e:
+                        f.write('url:' + i['url'] + '\r\n' + str(e) + '\r\n')
 
 #线程数组
 threads=[]
 
 #多线程下载文件
 def main(websiteurl):
-        #response=urllib.urlopen(websiteurl)
         req=urllib2.Request(websiteurl)
         req.add_header("User-Agent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.4 (KHTML, like Gecko) Chrome/22.0.1229.79 Safari/537.4")
         req.add_header("cookie", "bid=hellodouban")
         response=urllib2.urlopen(req)
         text=response.read()
         groups=re.finditer(reg, text)
+        i=0
         for g in groups:
                 name=g.group(1).strip() + ".mp3"
                 path=g.group(2).replace('\\', '')
-                t=downloader(path, name)
-                threads.append(t)
-
+                if i%6==0:
+                    t=downloader()
+                    threads.append(t)
+                t.info.append({'url':path, 'name':name})
+                i=i+1
 
 if __name__ == '__main__':
         args=sys.argv
@@ -65,9 +66,12 @@ if __name__ == '__main__':
 
         main(args[1])
 
+        print 'threads length is : %d' % len(threads)
+
         for t in threads:
                 t.start()
-        	time.sleep(1)
-		f.flush()
+
+        time.sleep(1)
+        f.flush()
         for t in threads:
                 t.join()
